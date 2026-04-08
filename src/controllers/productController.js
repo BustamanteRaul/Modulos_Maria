@@ -1,11 +1,12 @@
 const db = require("../config/database");
 const bcrypt = require("bcrypt");
+const service = require("../services/service");
 
 const SALT_ROUNDS = 10;
 
 // GET
 const getUsers = (req, res) => {
-  db.query("SELECT id, username, created_at FROM users", (err, results) => {
+  service.obtenerUsuarios((err, results) => {
     if (err) {
       return res.status(500).json({
         success: false,
@@ -44,22 +45,23 @@ const createUser = async (req, res) => {
     // HASH
     const hashedPassword = await bcrypt.hash(password, SALT_ROUNDS);
 
-    const query = "INSERT INTO users (username, password) VALUES (?, ?)";
+    service.crearUsuario(
+      { username, password: hashedPassword },
+      (err, result) => {
+        if (err) {
+          return res.status(500).json({
+            success: false,
+            message: "Error al crear usuario",
+          });
+        }
 
-    db.query(query, [username, hashedPassword], (err, result) => {
-      if (err) {
-        return res.status(500).json({
-          success: false,
-          message: "Error al crear usuario",
+        res.status(201).json({
+          success: true,
+          message: "Usuario creado correctamente",
+          data: { id: result.insertId, username },
         });
-      }
-
-      res.status(201).json({
-        success: true,
-        message: "Usuario creado correctamente",
-        data: { id: result.insertId, username },
-      });
-    });
+      },
+    );
   } catch (error) {
     res.status(500).json({
       success: false,
@@ -81,25 +83,7 @@ const updateUser = async (req, res) => {
       });
     }
 
-    let query = "UPDATE users SET ";
-    let values = [];
-
-    if (username) {
-      query += "username=?, ";
-      values.push(username);
-    }
-
-    if (password) {
-      const hashed = await bcrypt.hash(password, SALT_ROUNDS);
-      query += "password=?, ";
-      values.push(hashed);
-    }
-
-    query = query.slice(0, -2); // quitar coma
-    query += " WHERE id=?";
-    values.push(id);
-
-    db.query(query, values, (err, result) => {
+    service.actualizarUsuario(id, username, password, (err, result) => {
       if (err) {
         return res.status(500).json({
           success: false,
@@ -120,6 +104,7 @@ const updateUser = async (req, res) => {
       });
     });
   } catch (error) {
+    console.log(error);
     res.status(500).json({
       success: false,
       message: "Error inesperado",
@@ -130,7 +115,7 @@ const updateUser = async (req, res) => {
 const deleteUser = (req, res) => {
   const { id } = req.params;
 
-  db.query("DELETE FROM users WHERE id=?", [id], (err, result) => {
+  service.eliminarUsuario(id, (err, result) => {
     if (err) {
       return res.status(500).json({
         success: false,
