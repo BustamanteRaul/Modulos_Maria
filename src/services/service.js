@@ -4,6 +4,24 @@ const SALT_ROUNDS = 10;
 
 const { connect } = require("../routes");
 
+function login(username, password, callback) {
+  connection.query(
+    "SELECT * FROM users WHERE username=?",
+    username,
+    (err, results) => {
+      if (err) return callback(err);
+      if (results.length === 0) return callback(null, null);
+
+      const user = results[0];
+      bcrypt.compare(password, user.password, (err, isMatch) => {
+        if (err) return callback(err);
+        if (isMatch) return callback(null, user); //Estee es el ok
+        return callback(null, null);
+      });
+    },
+  );
+}
+
 function obtenerUsuarios(callback) {
   connection.query("SELECT * FROM users", callback);
 }
@@ -57,4 +75,5 @@ module.exports = {
   eliminarUsuario,
   buscarUsuarioPorNombre,
   buscarUsuarioPorId,
+  login,
 };
