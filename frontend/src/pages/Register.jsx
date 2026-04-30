@@ -1,8 +1,8 @@
-import { useEffect, useState } from "react";
 import { api } from "../services/api";
+import { useState } from "react";
 import { Link, useNavigate } from "react-router";
 
-export default function Login() {
+export default function Register() {
   const [form, setForm] = useState({ username: "", password: "" });
   const [message, setMessage] = useState("");
 
@@ -16,7 +16,7 @@ export default function Login() {
 
   let navigate = useNavigate();
 
-  const handleLogin = async (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
     if (!form.username.trim() || !form.password.trim()) {
@@ -24,25 +24,25 @@ export default function Login() {
       return;
     }
     try {
-      const response = await api.post("/login", form);
+      const response = await api.post("/users", form);
       if (response.status === 200) {
-        setMessage("Login exitoso");
+        setMessage("Usuario creado exitosamente");
         console.log(response.data);
-        navigate("/Users");
-      } else {
-        setMessage("Login fallido");
+        navigate("/");
+      } else if (response.status === 400 || response.status === 500) {
+        setMessage("Error al crear el usuario");
         console.log(response.data);
       }
     } catch (error) {
-      setMessage("Error al iniciar sesión");
+      setMessage("Error grave al crear el usuario");
       console.log(error);
     }
   };
 
   return (
     <div className={containerStyle}>
-      <h1 className={titleStyle}>Login</h1>
-      <form onSubmit={handleLogin} className={formStyle}>
+      <h1 className={titleStyle}>Crear Usuario</h1>
+      <form onSubmit={handleSubmit} className={formStyle}>
         <input
           type="text"
           className={inputStyle}
@@ -58,16 +58,10 @@ export default function Login() {
           onChange={(e) => setForm({ ...form, password: e.target.value })}
         />
         <button type="submit" className={buttonStyle}>
-          Login
+          Register
         </button>
       </form>
-      <p>
-        No estas registrado?
-        <Link to="/register" className="text-blue-600">
-          {" "}
-          Registrarse
-        </Link>
-      </p>
+      <Link to="/">Tengo una cuenta</Link>
       {message && <p>{message}</p>}
     </div>
   );
