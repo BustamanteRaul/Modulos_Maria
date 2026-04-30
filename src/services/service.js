@@ -2,7 +2,7 @@ const connection = require("../config/database");
 const bcrypt = require("bcrypt");
 const SALT_ROUNDS = 10;
 
-const { connect } = require("../routes");
+//const { connect } = require("../routes");
 
 function login(username, password, callback) {
   connection.query(
@@ -32,7 +32,7 @@ function crearUsuario(usuario, callback) {
 
 function actualizarUsuario(id, username, password, callback) {
   let query = "UPDATE users SET ";
-  let values = [];
+  const values = [];
 
   if (username) {
     query += "username=?, ";

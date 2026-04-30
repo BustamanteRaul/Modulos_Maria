@@ -1,4 +1,3 @@
-const db = require("../config/database");
 const bcrypt = require("bcrypt");
 const service = require("../services/service");
 
@@ -66,6 +65,7 @@ const createUser = async (req, res) => {
     res.status(500).json({
       success: false,
       message: "Error inesperado",
+      error: error.message,
     });
   }
 };

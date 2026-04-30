@@ -1,8 +1,7 @@
 const service = require("../services/service");
-const bcrypt = require("bcrypt");
+const auth = require("../auth");
 
 function login(req, res) {
-  console.log(req.body);
   const { username, password } = req.body;
 
   if (!username || !password) {
@@ -24,14 +23,20 @@ function login(req, res) {
         message: "Invalid credentials",
       });
 
-    res.status(200).json({
-      success: true,
-      message: "Login successful",
-      user,
-    });
+    res.status(200).json(
+      {
+        success: true,
+        message: "Login successful",
+        user,
+      },
+      auth.setUsuario(user),
+    );
   });
 }
 
+function logout(req, res) {}
+
 module.exports = {
   login,
+  logout,
 };
