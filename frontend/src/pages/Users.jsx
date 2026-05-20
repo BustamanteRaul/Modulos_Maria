@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { api } from "../services/api";
 import Buscador from "../components/buscador";
+import Logout from "../components/logout";
 
 export default function Users() {
   const [users, setUsers] = useState([]);
@@ -47,6 +48,7 @@ export default function Users() {
 
   return (
     <div className="min-h-screen bg-gray-300 p-8 gap-8 flex flex-col items-center">
+      <Logout />
       <Buscador />
 
       <div className="mx-auto bg-blue-50 p-5 rounded-xl shadow">

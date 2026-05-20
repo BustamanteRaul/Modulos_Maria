@@ -40,12 +40,11 @@ function actualizarUsuario(id, username, password, callback) {
   }
 
   if (password) {
-    const hashed = bcrypt.hash(password, SALT_ROUNDS);
     query += "password=?, ";
-    values.push(hashed);
+    values.push(password); // ← Ya viene hasheada desde el controller
   }
 
-  query = query.slice(0, -2); // quitar coma
+  query = query.slice(0, -2);
   query += " WHERE id=?";
   values.push(id);
 

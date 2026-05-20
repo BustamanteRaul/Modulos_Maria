@@ -83,7 +83,11 @@ const updateUser = async (req, res) => {
       });
     }
 
-    service.actualizarUsuario(id, username, password, (err, result) => {
+    const hashedPassword = password
+      ? await bcrypt.hash(password, SALT_ROUNDS)
+      : null;
+
+    service.actualizarUsuario(id, username, hashedPassword, (err, result) => {
       if (err) {
         return res.status(500).json({
           success: false,
@@ -91,7 +95,7 @@ const updateUser = async (req, res) => {
         });
       }
 
-      if (result.affectedRows === 0) {
+      if (!result || result.affectedRows === 0) {
         return res.status(404).json({
           success: false,
           message: "Usuario no encontrado",
@@ -123,7 +127,7 @@ const deleteUser = (req, res) => {
       });
     }
 
-    if (result.affectedRows === 0) {
+    if (!result || result.affectedRows === 0) {
       return res.status(404).json({
         success: false,
         message: "Usuario no encontrado",

@@ -14,7 +14,7 @@ export default function Login() {
   const buttonStyle =
     "bg-blue-500 text-white p-2 m-2 rounded-lg hover:bg-blue-600";
 
-  let navigate = useNavigate();
+  const navigate = useNavigate();
 
   const handleLogin = async (e) => {
     e.preventDefault();
@@ -28,6 +28,8 @@ export default function Login() {
       if (response.status === 200) {
         setMessage("Login exitoso");
         console.log(response.data);
+        // Guardar token en localStorage
+        localStorage.setItem("token", response.data.token);
         navigate("/Users");
       } else {
         setMessage("Login fallido");
