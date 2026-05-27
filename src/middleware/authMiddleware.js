@@ -2,11 +2,9 @@ const auth = require("../auth"); // No se usa actualmente, pero se mantiene por 
 const jwt = require("jsonwebtoken");
 
 function verificarUsuario(req, res, next) {
-  console.log(
-    "El usuario que llega a el verificarUsuario es:",
-    req.session.user,
-  );
-  if (req.session.user.username === "prueba") {
+  const user = auth.getUsuario();
+  console.log("El usuario que llega a el verificarUsuario es:", user.rol);
+  if (user.rol === "Admin") {
     console.log("Este usuario esta autorizado");
     next();
   } else {

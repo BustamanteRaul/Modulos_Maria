@@ -23,6 +23,7 @@ const getUsers = (req, res) => {
 
 // CREATE
 const createUser = async (req, res) => {
+  const defaultRol = "Usuario";
   try {
     const { username, password } = req.body;
 
@@ -45,7 +46,7 @@ const createUser = async (req, res) => {
     const hashedPassword = await bcrypt.hash(password, SALT_ROUNDS);
 
     service.crearUsuario(
-      { username, password: hashedPassword },
+      { username, password: hashedPassword, rol: defaultRol },
       (err, result) => {
         if (err) {
           return res.status(500).json({
@@ -74,7 +75,7 @@ const createUser = async (req, res) => {
 const updateUser = async (req, res) => {
   try {
     const { id } = req.params;
-    const { username, password } = req.body;
+    const { username, password, rol } = req.body;
 
     if (!username && !password) {
       return res.status(400).json({
@@ -87,26 +88,32 @@ const updateUser = async (req, res) => {
       ? await bcrypt.hash(password, SALT_ROUNDS)
       : null;
 
-    service.actualizarUsuario(id, username, hashedPassword, (err, result) => {
-      if (err) {
-        return res.status(500).json({
-          success: false,
-          message: "Error al actualizar usuario",
-        });
-      }
+    service.actualizarUsuario(
+      id,
+      username,
+      hashedPassword,
+      rol,
+      (err, result) => {
+        if (err) {
+          return res.status(500).json({
+            success: false,
+            message: "Error al actualizar usuario",
+          });
+        }
 
-      if (!result || result.affectedRows === 0) {
-        return res.status(404).json({
-          success: false,
-          message: "Usuario no encontrado",
-        });
-      }
+        if (!result || result.affectedRows === 0) {
+          return res.status(404).json({
+            success: false,
+            message: "Usuario no encontrado",
+          });
+        }
 
-      res.json({
-        success: true,
-        message: "Usuario actualizado correctamente",
-      });
-    });
+        res.json({
+          success: true,
+          message: "Usuario actualizado correctamente",
+        });
+      },
+    );
   } catch (error) {
     console.log(error);
     res.status(500).json({

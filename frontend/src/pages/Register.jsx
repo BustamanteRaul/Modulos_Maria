@@ -1,6 +1,6 @@
-import { api } from "../services/api";
 import { useState } from "react";
 import { Link, useNavigate } from "react-router";
+import { api } from "../services/api";
 
 export default function Register() {
   const [form, setForm] = useState({ username: "", password: "" });
@@ -14,7 +14,7 @@ export default function Register() {
   const buttonStyle =
     "bg-blue-500 text-white p-2 m-2 rounded-lg hover:bg-blue-600";
 
-  let navigate = useNavigate();
+  const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -28,7 +28,7 @@ export default function Register() {
       if (response.status === 200) {
         setMessage("Usuario creado exitosamente");
         console.log(response.data);
-        navigate("/");
+        navigate("/"); //por que esto no funciona? es de frontend no importa mucho.
       } else if (response.status === 400 || response.status === 500) {
         setMessage("Error al crear el usuario");
         console.log(response.data);

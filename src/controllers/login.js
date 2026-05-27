@@ -31,7 +31,7 @@ function login(req, res) {
     req.session.user = user; //Es redundante con el SetUsuario? Tal vez, Lo voy a dejar porque lo que anda no se toca? tambien.
 
     const token = jwt.sign(
-      { id: user.id, username: user.username },
+      { id: user.id, username: user.username, rol: user.rol },
       process.env.JWT_SECRET,
       { expiresIn: "1h" },
     );
@@ -42,7 +42,7 @@ function login(req, res) {
       success: true,
       message: "Login successful",
       user,
-      token: token,
+      token,
     });
   });
 }

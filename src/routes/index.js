@@ -19,10 +19,10 @@ const {
 
 router.get("/users", getUsers);
 router.post("/users", createUser);
-router.put("/users/:id", verificarToken, updateUser);
-router.delete("/users/:id", verificarToken, deleteUser);
-router.post("/users/searchByName", searchUserByName);
-router.post("/users/searchById", searchUserById);
+router.put("/users/:id", verificarToken, verificarUsuario, updateUser);
+router.delete("/users/:id", verificarToken, verificarUsuario, deleteUser);
+router.post("/users/searchByName", verificarToken, searchUserByName);
+router.post("/users/searchById", verificarToken, searchUserById);
 router.post("/login", login);
 router.post("/logout", isAuth, logout);
 router.get("/isAuth", isAuth);

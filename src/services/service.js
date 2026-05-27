@@ -1,6 +1,6 @@
 const connection = require("../config/database");
 const bcrypt = require("bcrypt");
-const SALT_ROUNDS = 10;
+// const SALT_ROUNDS = 10;
 
 //const { connect } = require("../routes");
 
@@ -30,7 +30,7 @@ function crearUsuario(usuario, callback) {
   connection.query("INSERT INTO users SET ?", usuario, callback);
 }
 
-function actualizarUsuario(id, username, password, callback) {
+function actualizarUsuario(id, username, password, rol, callback) {
   let query = "UPDATE users SET ";
   const values = [];
 
@@ -42,6 +42,11 @@ function actualizarUsuario(id, username, password, callback) {
   if (password) {
     query += "password=?, ";
     values.push(password); // ← Ya viene hasheada desde el controller
+  }
+
+  if (rol) {
+    query += "rol=?, ";
+    values.push(rol);
   }
 
   query = query.slice(0, -2);

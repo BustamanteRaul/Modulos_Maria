@@ -1,5 +1,5 @@
-import { api } from "../services/api";
 import { useNavigate } from "react-router";
+import { api } from "../services/api";
 
 export default function Logout() {
   const navigate = useNavigate();
@@ -10,6 +10,7 @@ export default function Logout() {
       const response = await api.post("/logout");
 
       if (response.status === 200) {
+        localStorage.removeItem("token");
         navigate("/");
       }
     } catch (err) {
