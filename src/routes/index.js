@@ -27,4 +27,14 @@ router.post("/login", login);
 router.post("/logout", isAuth, logout);
 router.get("/isAuth", isAuth);
 
+// para un producto del carrito en particular
+// router.post(añadir al carrito)
+// router.put(editar el carrito)
+// router.delete(eliminar del carrito)
+//
+// para el carrito en general
+// router.get(ver el carrito)
+// router.delete(eliminar el carrito)(no creo que se use)
+// router.post(comprar el carrito)(confirmacion de compra)
+
 module.exports = router;
