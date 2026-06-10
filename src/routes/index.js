@@ -8,7 +8,7 @@ const {
   deleteUser,
   searchUserById,
   searchUserByName,
-} = require("../controllers/productController");
+} = require("../controllers/userController");
 
 const { login, logout, isAuth } = require("../controllers/login");
 
