@@ -124,28 +124,35 @@ const updateUser = async (req, res) => {
 };
 
 const deleteUser = (req, res) => {
-  const { id } = req.params;
+  try {
+    const { id } = req.params;
 
-  service.eliminarUsuario(id, (err, result) => {
-    if (err) {
-      return res.status(500).json({
-        success: false,
-        message: "Error al eliminar usuario",
+    service.eliminarUsuario(id, (err, result) => {
+      if (err) {
+        return res.status(500).json({
+          success: false,
+          message: "Error al eliminar usuario",
+        });
+      }
+
+      if (!result || result.affectedRows === 0) {
+        return res.status(404).json({
+          success: false,
+          message: "Usuario no encontrado",
+        });
+      }
+
+      res.json({
+        success: true,
+        message: "Usuario eliminado correctamente",
       });
-    }
-
-    if (!result || result.affectedRows === 0) {
-      return res.status(404).json({
-        success: false,
-        message: "Usuario no encontrado",
-      });
-    }
-
-    res.json({
-      success: true,
-      message: "Usuario eliminado correctamente",
     });
-  });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: "Error al eliminar usuario",
+    });
+  }
 };
 
 const searchUserByName = (req, res) => {

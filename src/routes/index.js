@@ -9,6 +9,14 @@ const {
   searchUserById,
   searchUserByName,
 } = require("../controllers/userController");
+const {
+  getProducts,
+  createProduct,
+  updateProduct,
+  deleteProduct,
+  searchProductById,
+  searchProductByName,
+} = require("../controllers/productController.js");
 
 const { login, logout, isAuth } = require("../controllers/login");
 
@@ -17,16 +25,24 @@ const {
   verificarToken,
 } = require("../middleware/authMiddleware");
 
+//Rutas de usuario
 router.get("/users", getUsers);
 router.post("/users", createUser);
 router.put("/users/:id", verificarToken, verificarUsuario, updateUser);
 router.delete("/users/:id", verificarToken, verificarUsuario, deleteUser);
 router.post("/users/searchByName", verificarToken, searchUserByName);
 router.post("/users/searchById", verificarToken, searchUserById);
+//Rutas de autenticacion
 router.post("/login", login);
 router.post("/logout", isAuth, logout);
 router.get("/isAuth", isAuth);
-
+//Rutas de producto
+router.get("/products", getProducts);
+router.post("/products", verificarToken, verificarUsuario, createProduct);
+router.put("/products/:id", verificarToken, verificarUsuario, updateProduct);
+router.delete("/products/:id", verificarToken, verificarUsuario, deleteProduct);
+router.post("/products/searchByName", verificarToken, searchProductByName);
+router.post("/products/searchById", verificarToken, searchProductById);
 // para un producto del carrito en particular
 // router.post(añadir al carrito)
 // router.put(editar el carrito)
