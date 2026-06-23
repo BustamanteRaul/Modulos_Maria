@@ -1,19 +1,19 @@
 const connection = require("../config/database");
 
-function obtenerPedidos() {
-  connection.query("SELECT * FROM pedidos");
+function obtenerPedidos(callback) {
+  connection.query("SELECT * FROM pedidos", callback);
 }
 
-function crearPedidos(pedido) {
-  connection.query("INSERT INTO pedidos SET ?", pedido);
+function crearPedidos(pedido, callback) {
+  connection.query("INSERT INTO pedidos SET ?", pedido, callback);
 }
 
-function actualizarPedidos(pedido, id) {
-  connection.query("UPDATE pedidos SET ? WHERE id = ?", [pedido, id]);
+function actualizarPedidos(pedido, id, callback) {
+  connection.query("UPDATE pedidos SET ? WHERE id = ?", [pedido, id], callback);
 }
 
-function eliminarPedidos(id) {
-  connection.query("DELETE FROM pedidos WHERE id = ?", id);
+function eliminarPedidos(id, callback) {
+  connection.query("DELETE FROM pedidos WHERE id = ?", id, callback);
 }
 
 module.exports = {

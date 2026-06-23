@@ -113,7 +113,12 @@ const deleteProduct = (req, res) => {
           message: "Error al eliminar producto",
         });
       }
-
+      if (!results || results.affectedRows === 0) {
+        return res.status(404).json({
+          success: false,
+          message: "Producto no encontrado",
+        });
+      }
       res.status(200).json({
         success: true,
         message: "Producto eliminado correctamente",
