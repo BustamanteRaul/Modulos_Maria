@@ -24,6 +24,22 @@ const {
   verificarUsuario,
   verificarToken,
 } = require("../middleware/authMiddleware");
+const {
+  getPedidos,
+  createPedido,
+  updatePedido,
+  deletePedido,
+  searchPedidoById,
+  searchPedidoByUser,
+} = require("../controllers/pedidoController.js");
+const {
+  getDetalles,
+  createDetalle,
+  updateDetalle,
+  deleteDetalle,
+  searchDetalleById,
+  searchDetalleByPedido,
+} = require("../controllers/detalleController.js");
 
 //Rutas de usuario
 router.get("/users", getUsers);
@@ -36,20 +52,29 @@ router.post("/users/searchById", verificarToken, searchUserById);
 router.post("/login", login);
 router.post("/logout", isAuth, logout);
 router.get("/isAuth", isAuth);
+
 //Rutas de producto con authenticacion
-// router.get("/products", getProducts);
-// router.post("/products", verificarToken, verificarUsuario, createProduct);
-// router.put("/products/:id", verificarToken, verificarUsuario, updateProduct);
-// router.delete("/products/:id", verificarToken, verificarUsuario, deleteProduct);
-// router.post("/products/searchByName", verificarToken, searchProductByName);
-// router.post("/products/searchById", verificarToken, searchProductById);
-//Rutas de producto para probar sin auth
 router.get("/products", getProducts);
-router.post("/products", createProduct);
-router.put("/products/:id", updateProduct);
-router.delete("/products/:id", deleteProduct);
-router.post("/products/searchByName", searchProductByName);
-router.post("/products/searchById", searchProductById);
+router.post("/products", verificarToken, verificarUsuario, createProduct);
+router.put("/products/:id", verificarToken, verificarUsuario, updateProduct);
+router.delete("/products/:id", verificarToken, verificarUsuario, deleteProduct);
+router.post("/products/searchByName", verificarToken, searchProductByName);
+router.post("/products/searchById", verificarToken, searchProductById);
+
+router.get("/pedidos", getPedidos);
+router.post("/pedidos", createPedido);
+router.put("/pedidos/:id", updatePedido);
+router.delete("/pedidos/:id", deletePedido);
+router.post("/pedidos/searchById/:id", searchPedidoById);
+router.post("/pedidos/searchByUser/:name", searchPedidoByUser);
+
+router.get("/detalles", getDetalles);
+router.post("/detalles", createDetalle);
+router.put("/detalles/:id", updateDetalle);
+router.delete("/detalles/:id", deleteDetalle);
+router.post("/detalles/searchById/:id", searchDetalleById);
+router.post("/detalles/searchByUser/:name", searchDetalleByPedido);
+
 // para un producto del carrito en particular
 // router.post(añadir al carrito)
 // router.put(editar el carrito)

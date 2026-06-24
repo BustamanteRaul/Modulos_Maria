@@ -1,6 +1,6 @@
 const connection = require("../config/database");
 
-function obtenerDetalle(callback) {
+function obtenerDetalles(callback) {
   connection.query("SELECT * FROM detalles", callback);
 }
 
@@ -10,19 +10,37 @@ function crearDetalle(producto, callback) {
 
 function actualizarDetalle(producto, id, callback) {
   connection.query(
-    "UPDATE detalles SET ? WHERE id = ?",
+    "UPDATE detalles SET ? WHERE id_detalle = ?",
     [producto, id],
     callback,
   );
 }
 
 function eliminarDetalle(id, callback) {
-  connection.query("DELETE FROM detalles WHERE id = ?", id, callback);
+  connection.query("DELETE FROM detalles WHERE id_detalle = ?", id, callback);
+}
+
+function buscarDetallePorPedido(idPedido, callback) {
+  connection.query(
+    "SELECT * FROM detalles WHERE pedido_id = ?",
+    idPedido,
+    callback,
+  );
+}
+
+function buscarDetallePorId(idDetalle, callback) {
+  connection.query(
+    "SELECT * FROM detalles WHERE id_detalle = ?",
+    idDetalle,
+    callback,
+  );
 }
 
 module.exports = {
-  obtenerDetalle,
+  obtenerDetalles,
   crearDetalle,
   actualizarDetalle,
   eliminarDetalle,
+  buscarDetallePorPedido,
+  buscarDetallePorId,
 };
