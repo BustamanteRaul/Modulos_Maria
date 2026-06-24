@@ -65,16 +65,16 @@ function updateDetalle(req, res) {
       });
     }
 
-    if (!product_id || !pedido_id) {
+    if (!product_id && !pedido_id && !quantity) {
       return res.status(400).json({
         success: false,
-        message: "product_id y pedido_id son obligatorios",
+        message: "product_id, pedido_id y quantity son obligatorios",
       });
     }
 
     service.actualizarDetalle(
-      id,
       { product_id, pedido_id, quantity },
+      id,
       (err, results) => {
         if (err) {
           return res.status(500).json({
@@ -138,16 +138,16 @@ function deleteDetalle(req, res) {
 
 function searchDetalleByPedido(req, res) {
   try {
-    const { pedidoId } = req.params;
+    const { id } = req.body;
 
-    if (!pedidoId) {
+    if (!id) {
       return res.status(400).json({
         success: false,
-        message: "pedidoId es obligatorio",
+        message: "id es obligatorio",
       });
     }
 
-    service.buscarDetallePorPedido(pedidoId, (err, results) => {
+    service.buscarDetallePorPedido(id, (err, results) => {
       if (err) {
         return res.status(500).json({
           success: false,
@@ -176,16 +176,16 @@ function searchDetalleByPedido(req, res) {
 
 function searchDetalleById(req, res) {
   try {
-    const { idPedido } = req.params;
+    const { id } = req.params;
 
-    if (!idPedido) {
+    if (!id) {
       return res.status(400).json({
         success: false,
-        message: "idPedido es obligatorio",
+        message: "id es obligatorio",
       });
     }
 
-    service.buscarDetallePorId(idPedido, (err, results) => {
+    service.buscarDetallePorId(id, (err, results) => {
       if (err) {
         return res.status(500).json({
           success: false,

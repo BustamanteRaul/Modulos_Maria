@@ -62,13 +62,6 @@ function updatePedido(req, res) {
       });
     }
 
-    if (!fecha || !state || !total || !user_id) {
-      return res.status(400).json({
-        success: false,
-        message: "fecha, state, total y user_id son obligatorios",
-      });
-    }
-
     service.actualizarPedido(
       id,
       { fecha, state, total, user_id },
@@ -135,16 +128,16 @@ function deletePedido(req, res) {
 
 function searchPedidoByUser(req, res) {
   try {
-    const { userId } = req.params;
+    const { user_id } = req.body;
 
-    if (!userId) {
+    if (!user_id) {
       return res.status(400).json({
         success: false,
-        message: "userId es obligatorio",
+        message: "user_id es obligatorio",
       });
     }
 
-    service.buscarPedidoPorUsuario(userId, (err, results) => {
+    service.buscarPedidoPorUsuario(user_id, (err, results) => {
       if (err) {
         return res.status(500).json({
           success: false,
@@ -173,16 +166,16 @@ function searchPedidoByUser(req, res) {
 
 function searchPedidoById(req, res) {
   try {
-    const { idPedido } = req.params;
+    const { id } = req.params;
 
-    if (!idPedido) {
+    if (!id) {
       return res.status(400).json({
         success: false,
-        message: "idPedido es obligatorio",
+        message: "id es obligatorio",
       });
     }
 
-    service.buscarPedidoPorId(idPedido, (err, results) => {
+    service.buscarPedidoPorId(id, (err, results) => {
       if (err) {
         return res.status(500).json({
           success: false,

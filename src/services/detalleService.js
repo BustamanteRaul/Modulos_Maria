@@ -4,16 +4,33 @@ function obtenerDetalles(callback) {
   connection.query("SELECT * FROM detalles", callback);
 }
 
-function crearDetalle(producto, callback) {
-  connection.query("INSERT INTO detalles SET ?", producto, callback);
+function crearDetalle(detalle, callback) {
+  connection.query("INSERT INTO detalles SET ?", detalle, callback);
 }
 
-function actualizarDetalle(producto, id, callback) {
-  connection.query(
-    "UPDATE detalles SET ? WHERE id_detalle = ?",
-    [producto, id],
-    callback,
-  );
+function actualizarDetalle(detalle, id, callback) {
+  let query = "UPDATE detalles SET ";
+  const values = [];
+
+  if (detalle.product_id) {
+    query += "product_id=?, ";
+    values.push(detalle.product_id);
+  }
+  if (detalle.pedido_id) {
+    query += "pedido_id=?, ";
+    values.push(detalle.pedido_id);
+  }
+  if (detalle.quantity) {
+    query += "quantity=?, ";
+    values.push(detalle.quantity);
+  }
+
+  if (values.length === 0) return callback(new Error("No fields to update"));
+
+  query = query.slice(0, -2);
+  query += " WHERE id_detalle=?";
+  values.push(id);
+  connection.query(query, values, callback);
 }
 
 function eliminarDetalle(id, callback) {

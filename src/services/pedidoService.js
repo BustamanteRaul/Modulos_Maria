@@ -4,16 +4,37 @@ function obtenerPedidos(callback) {
   connection.query("SELECT * FROM pedidos", callback);
 }
 
-function crearPedidos(pedido, callback) {
+function crearPedido(pedido, callback) {
   connection.query("INSERT INTO pedidos SET ?", pedido, callback);
 }
 
-function actualizarPedido(pedido, id, callback) {
-  connection.query(
-    "UPDATE pedidos SET ? WHERE id_pedido = ?",
-    [pedido, id],
-    callback,
-  );
+function actualizarPedido(id, pedido, callback) {
+  let query = "UPDATE pedidos SET ";
+  const values = [];
+
+  if (pedido.fecha) {
+    query += "fecha=?, ";
+    values.push(pedido.fecha);
+  }
+  if (pedido.state) {
+    query += "state=?, ";
+    values.push(pedido.state);
+  }
+  if (pedido.total) {
+    query += "total=?, ";
+    values.push(pedido.total);
+  }
+  if (pedido.user_id) {
+    query += "user_id=?, ";
+    values.push(pedido.user_id);
+  }
+
+  if (values.length === 0) return callback(new Error("No fields to update"));
+
+  query = query.slice(0, -2);
+  query += " WHERE id_pedido=?";
+  values.push(id);
+  connection.query(query, values, callback);
 }
 
 function eliminarPedido(id, callback) {
@@ -38,7 +59,7 @@ function buscarPedidoPorId(idPedido, callback) {
 
 module.exports = {
   obtenerPedidos,
-  crearPedidos,
+  crearPedido,
   actualizarPedido,
   eliminarPedido,
   buscarPedidoPorUsuario,
